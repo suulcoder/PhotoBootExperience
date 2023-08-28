@@ -20,53 +20,77 @@ import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
 
-function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
+const purple = '#6D27A2'
 
+function App(): JSX.Element {
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    backgroundColor: Colors.lighter,
   };
 
   return (
     <SafeAreaView style={backgroundStyle}>
       <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        barStyle={'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
         <View
           style={{
             alignItems: 'center',
-            backgroundColor: Colors.black,
+            backgroundColor: Colors.white,
             display: 'flex',
             flexDirection: 'column',
             height: '100%',
             justifyContent: 'center'
           }}>
-            <Image 
-              source={require('./public/photo_logo.png')}
-              style={
-                {width: 250, height: 250}
-              }
-            />
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                alignContent: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <Image 
+                source={require('./public/starbucks.png')}
+                style={
+                  {
+                    width: 250, 
+                    height: 250,
+                    marginTop: 20,
+                    marginBottom: 40,
+                  }
+                }
+              />
+            </View>
             <Text
               style={{
-                color: '#6500ff',
-                fontSize: 24,
-                fontWeight: '600',
-                marginBottom: 100,
-                fontFamily: 'Baskerville',
+                color: Colors.black,
+                fontSize: 40,
+                fontWeight: 'bold',
+                fontFamily: 'Roboto',
                 textAlign: 'center'
               }}>
-              {'CREA RECUERDOS CON\n ZACK STEAM Y STARBUCKS'}
+              {'CREA RECUERDOS CON'}
+            </Text>
+            <Text
+              style={{
+                color: Colors.black,
+                fontSize: 32,
+                fontWeight: 'bold',
+                marginBottom: 180,
+                fontFamily: 'Roboto',
+                textAlign: 'center'
+              }}>
+              {'ZACK STEAM Y STARBUCKS'}
             </Text>
         </View>
         <Image 
               source={require('./public/qr.png')}
               style={{
-                width: 100, 
-                height: 100,
-                bottom: 150,
-                right: Dimensions.get('window').width/2 - 50, 
+                width: 80, 
+                height: 80,
+                bottom: 75,
+                right: Dimensions.get('window').width/2 - 40, 
                 position: 'absolute'
               }}
             />
