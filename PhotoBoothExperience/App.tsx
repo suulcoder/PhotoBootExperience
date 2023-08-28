@@ -15,17 +15,54 @@ import {
 } from 'react-native';
 import { Dimensions } from 'react-native';
 import {
+  useCameraDevices,
+  useFrameProcessor,
+} from 'react-native-vision-camera';
+import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
-// import {
-//   Camera,
-// } from 'react-native-vision-camera';
+import {
+  Camera,
+} from 'react-native-vision-camera';
+import TrackPlayer from 'react-native-track-player';
+import { scanFaces } from 'vision-camera-face-detector';
 
-// import { scanFaces } from 'vision-camera-face-detector';
 
+TrackPlayer.registerPlaybackService(() => require('./service'));
+
+module.exports = async function() {
+  await TrackPlayer.setupPlayer()
+  const track2 = {
+      url: require('./public/LMDA.wav'), // Load media from the app bundle
+      title: 'LMDA',
+      artist: 'Zack Steam',
+      artwork: require('./public/Artwork.png'), // Load artwork from the app bundle
+      duration: 126
+  };
+}
 
 function App(): JSX.Element {
-  // const [_, setHasPermission] = React.useState(false);
+  const [hasPermission, setHasPermission] = React.useState(false);
+
+  const devices = useCameraDevices();
+  const device = devices.front;
+
+  React.useEffect(() => {
+    (async () => {
+      const status = await Camera.requestCameraPermission();
+      setHasPermission(status === 'authorized');
+    })();
+  }, []);
+
+  const frameProcessor = useFrameProcessor((frame) => {
+    'worklet';
+    const scannedFaces = scanFaces(frame);
+    if(scanFaces.length>0){
+
+    }
+  }, []);
+
+
 
   const backgroundStyle = {
     backgroundColor: Colors.lighter,
@@ -36,12 +73,12 @@ function App(): JSX.Element {
     //
   }
 
-  // React.useEffect(() => {
-  //   (async () => {
-  //     const status = await Camera.requestCameraPermission();
-  //     setHasPermission(status === 'authorized');
-  //   })();
-  // }, []);
+  React.useEffect(() => {
+    (async () => {
+      const status = await Camera.requestCameraPermission();
+      setHasPermission(status === 'authorized');
+    })();
+  }, []);
 
 
   return (
@@ -59,6 +96,13 @@ function App(): JSX.Element {
             height: '100%',
             justifyContent: 'center'
           }}>
+            {device != null && hasPermission &&
+            <Camera
+              device={device}
+              isActive={true}
+              frameProcessor={frameProcessor}
+              frameProcessorFps={5}
+            />}
             <View
               style={{
                 display: 'flex',
