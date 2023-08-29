@@ -41,7 +41,7 @@ export async function addTrack() {
         title: 'LMDA',
         artist: 'Zack Steam',
         artwork: require('./public/Artwork.png'), // Load artwork from the app bundle
-        duration: 200
+        duration: 150
     }
   ]);
   await TrackPlayer.setRepeatMode(RepeatMode.Track);
