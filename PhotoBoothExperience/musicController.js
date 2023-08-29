@@ -37,7 +37,7 @@ export async function setupPlayer() {
 export async function addTrack() {
   await TrackPlayer.add([
     {
-        url: require('./public/PhotoBooth.wav'), // Load media from the app bundle
+        url: require('./public/Photobooth.wav'), // Load media from the app bundle
         title: 'LMDA',
         artist: 'Zack Steam',
         artwork: require('./public/Artwork.png'), // Load artwork from the app bundle
