@@ -28,10 +28,13 @@ import TrackPlayer from 'react-native-track-player';
 import { setupPlayer, addTrack } from './musicController';
 
 function App(): JSX.Element {
-  const [step, setStep] = React.useState(1);
+  const [step, setStep] = React.useState(0);
+  const [counter, setCounter] = React.useState(6);
+  const [showedText, setShowedText] = React.useState('');
   const [_, setHasPermission] = React.useState(false);
   const devices = useCameraDevices();
   const device = devices.front;
+  const camera = React.useRef<Camera>(null)
 
   React.useEffect(() => {
     (async () => {
@@ -59,9 +62,103 @@ function App(): JSX.Element {
     backgroundColor: Colors.lighter,
   };
 
+  function delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
+  }
+
   function onStart() {
     TrackPlayer.play();
     setStep(1);
+
+    async function PictureSequence() {
+      //Starting first picture
+      setShowedText('Tienes 3 segundos para hacer la pose más loca')
+      await delay(900)
+      setCounter(5)
+      await delay(900)
+      setCounter(4)
+      await delay(900)
+      setCounter(3)
+      await delay(900)
+      setCounter(2)
+      await delay(900)
+      setCounter(1)
+      await delay(900)
+
+      const photo1 = camera.current!=null ? await camera.current.takePhoto({
+        flash: 'on' 
+      }) : null
+
+      //Taking Second Picture
+      setCounter(5)
+      await delay(900)
+      setCounter(4)
+      await delay(900)
+      setCounter(3)
+      await delay(900)
+      setCounter(2)
+      await delay(900)
+      setCounter(1)
+      await delay(900)
+
+      const photo2 = camera.current!=null ? await camera.current.takePhoto({
+        flash: 'on' 
+      }) : null
+
+      //Taking Third Picture
+      setCounter(6)
+      await delay(900)
+      setCounter(5)
+      await delay(900)
+      setCounter(4)
+      await delay(900)
+      setCounter(3)
+      await delay(900)
+      setCounter(2)
+      await delay(900)
+      setCounter(1)
+      await delay(900)
+
+      const photo3 = camera.current!=null ? await camera.current.takePhoto({
+        flash: 'on' 
+      }) : null
+      
+      //Taking Fourth Picture
+      setCounter(7)
+      await delay(900)
+      setCounter(6)
+      await delay(900)
+      setCounter(5)
+      await delay(900)
+      setCounter(4)
+      await delay(900)
+      setCounter(3)
+      await delay(900)
+      setCounter(2)
+      await delay(900)
+      setCounter(1)
+      await delay(900)
+
+      const photo4 = camera.current!=null ? await camera.current.takePhoto({
+        flash: 'on' 
+      }) : null
+
+      await delay(900)
+
+    }
+
+    PictureSequence()
+
+  }
+
+  function onStop() {
+    setStep(0);
+    async function addTrack() {
+      await addTrack();
+    }
+    TrackPlayer.pause();
+    TrackPlayer.skipToNext();
+    addTrack();
   }
 
   return (
@@ -181,6 +278,7 @@ function App(): JSX.Element {
               }}>
                 {(device != null) && 
                 <Camera
+                  ref={camera}
                   photo={true}
                   style={StyleSheet.absoluteFill}
                   device={device}
@@ -188,16 +286,62 @@ function App(): JSX.Element {
                 />
                 }
             </View>
-            <Image 
-              source={require('./public/qr.png')}
+            <View
               style={{
-                width: 80, 
-                height: 80,
-                bottom: 75,
-                right: Dimensions.get('window').width/2 - 40, 
-                position: 'absolute'
+                bottom: 0,
+                padding: 75,
+                position: 'absolute',
+                display: 'flex',
+                flexDirection: 'row',
+                alignItems: 'center',
+                width: '100%',
+                justifyContent: 'space-between'
               }}
-            />
+            >
+              <View
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }}
+              >
+                <Text
+                  style={{
+                    fontFamily: 'Roboto',
+                    color: Colors.black,
+                    fontSize: 16,
+                    lineHeight: 16,
+                    fontWeight: 'bold',
+                  }}
+                >
+                  {'Next in'}
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: 'Roboto',
+                    color: Colors.black,
+                    fontSize: 40,
+                    lineHeight: 40,
+                    fontWeight: 'bold',
+                  }}
+                >
+                  {counter}
+                </Text>
+              </View>
+
+              <TouchableOpacity
+                onPress={onStop}
+                >
+                  <Image 
+                    source={require('./public/back_arrow.png')}
+                    style={{
+                      width: 40, 
+                      height: 40,
+                    }}
+                  />
+              </TouchableOpacity>
+            </View>
         </SafeAreaView>
      )
 }

@@ -19,11 +19,11 @@ export async function setupPlayer() {
       },
       capabilities: [
         Capability.Play,
-        Capability.Pause,
+        Capability.Stop,
       ],
       compactCapabilities: [
         Capability.Play,
-        Capability.Pause,
+        Capability.Stop,
       ],
       progressUpdateEventInterval: 2,
     });
