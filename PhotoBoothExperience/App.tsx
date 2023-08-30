@@ -13,7 +13,6 @@ import {
   Text,
   View,
   StyleSheet,
-  Animated,
 } from 'react-native';
 import { Dimensions } from 'react-native';
 import {
@@ -30,21 +29,14 @@ import { setupPlayer, addTrack } from './musicController';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 function App(): JSX.Element {
-  const step = React.useRef(new Animated.Value(0)).current
-  const takenPhotos = React.useRef(new Animated.Value(0)).current
-  const photos = []
-  const counter = React.useRef(new Animated.Value(6)).current
+  const [step, setStep] = React.useState(0);
+  const [takenPhotos, setTakenPhotos] = React.useState(0);
+  const [counter, setCounter] = React.useState(6);
+  const [showedText, setShowedText] = React.useState('');
   const [_, setHasPermission] = React.useState(false);
   const devices = useCameraDevices();
   const device = devices.front;
   const camera = React.useRef<Camera>(null)
-
-  const _step = 0
-  step.addListener(({value}) => _step);
-  const _takenPhotos = 0
-  takenPhotos.addListener(({value}) => _step);
-  const _counter = 0
-  counter.addListener(({value}) => _counter);
 
   React.useEffect(() => {
     (async () => {
@@ -55,7 +47,7 @@ function App(): JSX.Element {
 
   React.useEffect(() => {
     async function setup() {
-      let isSetup = await setupPlayer();
+      await setupPlayer();
       await addTrack();
     }
     setup();
@@ -68,16 +60,6 @@ function App(): JSX.Element {
     })();
   }, []);
 
-  async function PictureSequence() {
-    photos.push(camera.current!=null ? await camera.current.takePhoto({
-      flash: 'on' 
-    }) : null)
-  }
-
-  function takePicture(){
-    PictureSequence()
-  };
-
   const backgroundStyle = {
     backgroundColor: Colors.lighter,
   };
@@ -86,209 +68,96 @@ function App(): JSX.Element {
     return new Promise( resolve => setTimeout(resolve, ms) );
   }
 
-  const sequence =  Animated.sequence([
-    //Preparation
-    Animated.timing(step, {
-      toValue: 1,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    Animated.timing(takenPhotos, {
-      toValue: 0,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    Animated.delay(790),
-    Animated.timing(counter, {
-      toValue: 5,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    Animated.delay(790),
-    Animated.timing(counter, {
-      toValue: 4,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    Animated.delay(790),
-    Animated.timing(counter, {
-      toValue: 3,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    Animated.delay(790),
-    Animated.timing(counter, {
-      toValue: 2,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    Animated.delay(790),
-    Animated.timing(counter, {
-      toValue: 1,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    //take picture here
-    Animated.timing(takenPhotos, {
-      toValue: 1,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    Animated.timing(counter, {
-      toValue: 5,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    Animated.delay(790),
-    Animated.timing(counter, {
-      toValue: 4,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    Animated.delay(790),
-    Animated.timing(counter, {
-      toValue: 3,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    Animated.delay(790),
-    Animated.timing(counter, {
-      toValue: 2,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    Animated.delay(790),
-    Animated.timing(counter, {
-      toValue: 1,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    //take picture here
-    Animated.timing(takenPhotos, {
-      toValue: 2,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    Animated.timing(counter, {
-      toValue: 6,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    Animated.delay(790),
-    Animated.timing(counter, {
-      toValue: 5,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    Animated.delay(790),
-    Animated.timing(counter, {
-      toValue: 4,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    Animated.delay(790),
-    Animated.timing(counter, {
-      toValue: 3,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    Animated.delay(790),
-    Animated.timing(counter, {
-      toValue: 2,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    Animated.delay(790),
-    Animated.timing(counter, {
-      toValue: 1,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    //take picture here
-    Animated.timing(takenPhotos, {
-      toValue: 3,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    Animated.timing(counter, {
-      toValue: 7,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    Animated.delay(790),
-    Animated.timing(counter, {
-      toValue: 6,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    Animated.delay(790),
-    Animated.timing(counter, {
-      toValue: 5,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    Animated.delay(790),
-    Animated.timing(counter, {
-      toValue: 4,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    Animated.delay(790),
-    Animated.timing(counter, {
-      toValue: 3,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    Animated.delay(790),
-    Animated.timing(counter, {
-      toValue: 2,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    Animated.delay(790),
-    Animated.timing(counter, {
-      toValue: 1,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    //take picture here
-    Animated.timing(takenPhotos, {
-      toValue: 4,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    Animated.delay(8000),
-    Animated.timing(step, {
-      toValue: 2,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-    Animated.delay(8000),
-    Animated.timing(step, {
-      toValue: 3,
-      duration: 1,
-      useNativeDriver: true,
-    }),
-  ])
-
   function onStart() {
     TrackPlayer.play();
-    console.log(sequence);
-    sequence.start()
+    const photos = []
+    setStep(1);
+
+    async function PictureSequence() {
+      setTakenPhotos(0)
+      //Starting first picture                     
+      setShowedText('¡Tienes 3 segundos para hacer la pose más loca!')
+      await delay(790)
+      setCounter(5)
+      await delay(790)
+      setCounter(4)
+      await delay(790)
+      setCounter(3)
+      await delay(790)
+      setCounter(2)
+      await delay(790)
+      setCounter(1)
+      photos.push(camera.current!=null ? await camera.current.takePhoto({
+        flash: 'on' 
+      }) : null)
+      setTakenPhotos(1)
+
+      //Taking Second Picture
+      setShowedText('¡Tomemos una más!')
+      setCounter(5)
+      await delay(790)
+      setCounter(4)
+      await delay(790)
+      setCounter(3)
+      await delay(790)
+      setCounter(2)
+      await delay(790)
+      setCounter(1)
+      photos.push(camera.current!=null ? await camera.current.takePhoto({
+        flash: 'on' 
+      }) : null)
+      setTakenPhotos(2)
+
+      //Taking Third Picture
+      setShowedText('¡Haz una pose diferente esta vez!')
+      setCounter(6)
+      await delay(790)
+      setCounter(5)
+      await delay(790)
+      setCounter(4)
+      await delay(790)
+      setCounter(3)
+      await delay(790)
+      setCounter(2)
+      await delay(790)
+      setCounter(1)
+      photos.push(camera.current!=null ? await camera.current.takePhoto({
+        flash: 'on' 
+      }) : null)
+      setTakenPhotos(3)
+
+      //Taking Fourth Picture
+      setShowedText('¡Intenta bailar la canción!')
+      setCounter(7)
+      await delay(790)
+      setCounter(6)
+      await delay(790)
+      setCounter(5)
+      await delay(790)
+      setCounter(4)
+      await delay(790)
+      setCounter(3)
+      await delay(790)
+      setCounter(2)
+      await delay(790)
+      setCounter(1)
+      photos.push(camera.current!=null ? await camera.current.takePhoto({
+        flash: 'on' 
+      }) : null)
+      setTakenPhotos(4)
+      await delay(8000)
+      setStep(2);
+
+      await delay(8000)
+      setStep(3);
+    }
+
+    PictureSequence()
   }
 
   function onStop() {
-    sequence.stop()
-    Animated.timing(takenPhotos, {
-      toValue: 0,
-      duration: 1,
-      useNativeDriver: true,
-    }).start(),
-    Animated.timing(step, {
-      toValue: 0,
-      duration: 1,
-      useNativeDriver: true,
-    }).start(),
+    setTakenPhotos(0);
+    setStep(0);
     TrackPlayer.pause();
     async function set() {
       await addTrack();
@@ -298,7 +167,7 @@ function App(): JSX.Element {
   }
 
   return (
-     Math.floor(_step)===0 ?
+      step===0 ?
       <SafeAreaView style={backgroundStyle}>
       <StatusBar
         barStyle={'dark-content'}
@@ -398,7 +267,7 @@ function App(): JSX.Element {
           }}
         />
       </SafeAreaView> :
-      Math.floor(_step) === 1 ?
+      step === 1 ?
       <SafeAreaView style={backgroundStyle}>
           <StatusBar
             barStyle={'dark-content'}
@@ -482,7 +351,7 @@ function App(): JSX.Element {
                       fontWeight: 'bold',
                     }}
                   >
-                    {Math.floor(_counter)}
+                    {counter}
                   </Text>
                 </View>
               </View>
@@ -521,10 +390,10 @@ function App(): JSX.Element {
                       textAlign: 'center',
                       width: 40, 
                       height: 40,
-                    }}>{Math.floor(_takenPhotos)}</Text>
+                    }}>{takenPhotos}</Text>
               </View>
         </SafeAreaView> :
-        Math.floor(_step) === 2 ?
+        step === 2 ?
         <SafeAreaView style={backgroundStyle}>
           <StatusBar
             barStyle={'dark-content'}
