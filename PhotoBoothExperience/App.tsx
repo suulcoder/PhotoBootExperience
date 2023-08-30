@@ -68,97 +68,91 @@ function App(): JSX.Element {
 
   function onStart() {
     TrackPlayer.play();
+    const photos = []
     setStep(1);
 
     async function PictureSequence() {
       //Starting first picture
-      setShowedText('Tienes 3 segundos para hacer la pose más loca')
-      await delay(900)
+      setShowedText('¡Tienes 3 segundos para hacer la pose más loca!')
+      await delay(790)
       setCounter(5)
-      await delay(900)
+      await delay(790)
       setCounter(4)
-      await delay(900)
+      await delay(790)
       setCounter(3)
-      await delay(900)
+      await delay(790)
       setCounter(2)
-      await delay(900)
+      await delay(790)
       setCounter(1)
-      await delay(900)
-
-      const photo1 = camera.current!=null ? await camera.current.takePhoto({
+      photos.push(camera.current!=null ? await camera.current.takePhoto({
         flash: 'on' 
-      }) : null
+      }) : null)
 
       //Taking Second Picture
+      setShowedText('¡Tomemos una más!')
       setCounter(5)
-      await delay(900)
+      await delay(790)
       setCounter(4)
-      await delay(900)
+      await delay(790)
       setCounter(3)
-      await delay(900)
+      await delay(790)
       setCounter(2)
-      await delay(900)
+      await delay(790)
       setCounter(1)
-      await delay(900)
-
-      const photo2 = camera.current!=null ? await camera.current.takePhoto({
+      photos.push(camera.current!=null ? await camera.current.takePhoto({
         flash: 'on' 
-      }) : null
+      }) : null)
 
       //Taking Third Picture
+      setShowedText('¡Haz una pose diferente esta vez!')
       setCounter(6)
-      await delay(900)
+      await delay(790)
       setCounter(5)
-      await delay(900)
+      await delay(790)
       setCounter(4)
-      await delay(900)
+      await delay(790)
       setCounter(3)
-      await delay(900)
+      await delay(790)
       setCounter(2)
-      await delay(900)
+      await delay(790)
       setCounter(1)
-      await delay(900)
-
-      const photo3 = camera.current!=null ? await camera.current.takePhoto({
+      photos.push(camera.current!=null ? await camera.current.takePhoto({
         flash: 'on' 
-      }) : null
-      
+      }) : null)
+
       //Taking Fourth Picture
+      setShowedText('¡Intenta bailar la canción!')
       setCounter(7)
-      await delay(900)
+      await delay(790)
       setCounter(6)
-      await delay(900)
+      await delay(790)
       setCounter(5)
-      await delay(900)
+      await delay(790)
       setCounter(4)
-      await delay(900)
+      await delay(790)
       setCounter(3)
-      await delay(900)
+      await delay(790)
       setCounter(2)
-      await delay(900)
+      await delay(790)
       setCounter(1)
-      await delay(900)
-
-      const photo4 = camera.current!=null ? await camera.current.takePhoto({
+      photos.push(camera.current!=null ? await camera.current.takePhoto({
         flash: 'on' 
-      }) : null
-
-      await delay(900)
+      }) : null)
+      await delay(1000)
 
     }
 
     PictureSequence()
-
   }
 
   function onStop() {
     setStep(0);
-    async function addTrack() {
+    TrackPlayer.pause();
+    async function set() {
       await addTrack();
     }
-    TrackPlayer.pause();
+    set();
     TrackPlayer.skipToNext();
-    addTrack();
   }
 
   return (
@@ -295,42 +289,61 @@ function App(): JSX.Element {
                 flexDirection: 'row',
                 alignItems: 'center',
                 width: '100%',
-                justifyContent: 'space-between'
+                justifyContent: 'center'
               }}
             >
               <View
                 style={{
+                  width: 115,
+                  height: 115,
+                  borderRadius: 100,
+                  borderColor: Colors.white,
+                  borderWidth: 2,
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'center',
                   alignItems: 'center'
                 }}
               >
-                <Text
+                <View
                   style={{
-                    fontFamily: 'Roboto',
-                    color: Colors.black,
-                    fontSize: 16,
-                    lineHeight: 16,
-                    fontWeight: 'bold',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderRadius: 100,
+                    height: 100,
+                    padding: 20,
+                    width: 100,
+                    backgroundColor: Colors.white,
                   }}
                 >
-                  {'Next in'}
-                </Text>
-                <Text
-                  style={{
-                    fontFamily: 'Roboto',
-                    color: Colors.black,
-                    fontSize: 40,
-                    lineHeight: 40,
-                    fontWeight: 'bold',
-                  }}
-                >
-                  {counter}
-                </Text>
+                  <Text
+                    style={{
+                      fontFamily: 'Roboto',
+                      color: Colors.black,
+                      fontSize: 16,
+                      marginTop: 10,
+                      lineHeight: 16,
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    {'Next in'}
+                  </Text>
+                  <Text
+                    style={{
+                      fontFamily: 'Roboto',
+                      color: Colors.black,
+                      fontSize: 40,
+                      lineHeight: 40,
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    {counter}
+                  </Text>
+                </View>
               </View>
-
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={onStop}
                 >
                   <Image 
@@ -340,7 +353,16 @@ function App(): JSX.Element {
                       height: 40,
                     }}
                   />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
+            </View>
+            <View
+              style={{
+                backgroundColor:Colors.black,
+                position: 'absolute',
+                
+              }}
+            >
+
             </View>
         </SafeAreaView>
      )
