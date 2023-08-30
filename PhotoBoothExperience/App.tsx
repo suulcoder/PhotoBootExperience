@@ -13,9 +13,11 @@ import {
   Text,
   View,
   StyleSheet,
+  Animated,
 } from 'react-native';
 import { Dimensions } from 'react-native';
 import {
+  PhotoFile,
   useCameraDevices,
 } from 'react-native-vision-camera';
 import {
@@ -27,12 +29,15 @@ import {
 import TrackPlayer from 'react-native-track-player';
 import { setupPlayer, addTrack } from './musicController';
 import Spinner from 'react-native-loading-spinner-overlay';
+import RNRestart from 'react-native-restart';
 
 function App(): JSX.Element {
   const [step, setStep] = React.useState(0);
   const [takenPhotos, setTakenPhotos] = React.useState(0);
+  const [hasTakenPhotos, setHasTakenPhotos] = React.useState(false);
   const [counter, setCounter] = React.useState(6);
   const [showedText, setShowedText] = React.useState('');
+  const [photos, setPhotos] = React.useState(new Array<PhotoFile>);
   const [_, setHasPermission] = React.useState(false);
   const devices = useCameraDevices();
   const device = devices.front;
@@ -70,10 +75,10 @@ function App(): JSX.Element {
 
   function onStart() {
     TrackPlayer.play();
-    const photos = []
     setStep(1);
 
     async function PictureSequence() {
+
       setTakenPhotos(0)
       //Starting first picture                     
       setShowedText('¡Tienes 3 segundos para hacer la pose más loca!')
@@ -87,9 +92,13 @@ function App(): JSX.Element {
       setCounter(2)
       await delay(790)
       setCounter(1)
-      photos.push(camera.current!=null ? await camera.current.takePhoto({
-        flash: 'on' 
-      }) : null)
+      if(camera.current!=null){
+        const my_photo = [await camera.current.takePhoto({
+          flash: 'on' 
+        })]
+        setPhotos(my_photo)
+      }
+      setHasTakenPhotos(true)
       setTakenPhotos(1)
 
       //Taking Second Picture
@@ -98,14 +107,19 @@ function App(): JSX.Element {
       await delay(790)
       setCounter(4)
       await delay(790)
+      setHasTakenPhotos(false)
       setCounter(3)
       await delay(790)
       setCounter(2)
       await delay(790)
       setCounter(1)
-      photos.push(camera.current!=null ? await camera.current.takePhoto({
-        flash: 'on' 
-      }) : null)
+      if(camera.current!=null){
+        const my_photo = [await camera.current.takePhoto({
+          flash: 'on' 
+        })]
+        setPhotos(my_photo)
+      }
+      setHasTakenPhotos(true)
       setTakenPhotos(2)
 
       //Taking Third Picture
@@ -114,6 +128,7 @@ function App(): JSX.Element {
       await delay(790)
       setCounter(5)
       await delay(790)
+      setHasTakenPhotos(false)
       setCounter(4)
       await delay(790)
       setCounter(3)
@@ -121,49 +136,64 @@ function App(): JSX.Element {
       setCounter(2)
       await delay(790)
       setCounter(1)
-      photos.push(camera.current!=null ? await camera.current.takePhoto({
-        flash: 'on' 
-      }) : null)
+      if(camera.current!=null){
+        const my_photo = [await camera.current.takePhoto({
+          flash: 'on' 
+        })]
+        setPhotos(my_photo)
+      }
+      setHasTakenPhotos(true)
       setTakenPhotos(3)
 
       //Taking Fourth Picture
+
       setShowedText('¡Intenta bailar la canción!')
-      setCounter(7)
-      await delay(790)
-      setCounter(6)
-      await delay(790)
       setCounter(5)
       await delay(790)
       setCounter(4)
       await delay(790)
+      setHasTakenPhotos(false)
       setCounter(3)
       await delay(790)
       setCounter(2)
       await delay(790)
       setCounter(1)
-      photos.push(camera.current!=null ? await camera.current.takePhoto({
-        flash: 'on' 
-      }) : null)
+      if(camera.current!=null){
+        const my_photo = [await camera.current.takePhoto({
+          flash: 'on' 
+        })]
+        setPhotos(my_photo)
+      }
+      setHasTakenPhotos(true)
       setTakenPhotos(4)
-      await delay(8000)
+
+      await delay(1500)
+      setHasTakenPhotos(false)
+      await delay(3000)
       setStep(2);
 
       await delay(8000)
-      setStep(3);
+      //setStep(3);
     }
 
     PictureSequence()
   }
 
   function onStop() {
-    setTakenPhotos(0);
-    setStep(0);
-    TrackPlayer.pause();
-    async function set() {
-      await addTrack();
-    }
-    set();
-    TrackPlayer.skipToNext();
+    RNRestart.restart();
+    // setTakenPhotos(0);
+    // setStep(0);
+    // TrackPlayer.pause();
+    // async function set() {
+    //   await addTrack();
+    // }
+    // set();
+    // TrackPlayer.skipToNext();
+  }
+
+
+  function logTakenPhotos() {
+    return true
   }
 
   return (
@@ -292,6 +322,19 @@ function App(): JSX.Element {
                 />
                 }
             </View>
+            {
+              hasTakenPhotos && logTakenPhotos() &&
+              <Animated.Image 
+                source={{uri: 'file://' + photos[0].path}}
+                style={{
+                  width: Dimensions.get('window').width,
+                  height: Dimensions.get('window').height,
+                  bottom: 0,
+                  left: 0,
+                  position: 'absolute',
+                }}
+              />
+            }
             <View
               style={{
                 bottom: 0,
