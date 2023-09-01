@@ -31,19 +31,22 @@ import { setupPlayer, addTrack } from './musicController';
 import Spinner from 'react-native-loading-spinner-overlay';
 import RNRestart from 'react-native-restart';
 
+
 function App(): JSX.Element {
-  const [step, setStep] = React.useState(2);
+  const [step, setStep] = React.useState(0);
   const [takenPhotos, setTakenPhotos] = React.useState(0);
   const [hasTakenPhotos, setHasTakenPhotos] = React.useState(false);
   const [counter, setCounter] = React.useState(6);
   const [showedText, setShowedText] = React.useState('');
   const [photos, setPhotos] = React.useState(new Array<PhotoFile>);
   const [photosCaches, setPhotosCaches] = React.useState(new Array<string>);
+  const [videos, setVideos] = React.useState('');
   const [_, setHasPermission] = React.useState(false);
   const [paused, setPaused] = React.useState(false);
   const devices = useCameraDevices();
   const device = devices.front;
   const camera = React.useRef<Camera>(null)
+  const video = React.useRef<Camera>(null)
 
   const [showFirstPic, setShowFirstPic] = React.useState(false);
   const [showSecondPic, setShowSecondPic] = React.useState(false);
@@ -90,12 +93,8 @@ function App(): JSX.Element {
     setStep(1);
 
     async function PictureSequence() {
-      if(camera.current!=null){
-        camera.current.startRecording({
-          onRecordingFinished: (video) => console.log(video),
-          onRecordingError: (error) => console.error(error),
-        })
-      }
+      // recording start
+      
       setTakenPhotos(0)
       //Starting first picture                     
       setShowedText('¡Tienes 3 segundos para hacer la pose más loca!')
@@ -107,7 +106,17 @@ function App(): JSX.Element {
       setCounter(3)
       await delay(790)
       setCounter(2)
-      await delay(790)
+      if(video.current!=null){
+        video.current.startRecording({
+          flash: 'on',
+          onRecordingFinished: (video_) => {
+            console.log(video_)
+            setVideos(video_.path)
+          },
+          onRecordingError: (error) => console.error(error),
+        })
+      }
+      await delay(490)
       setCounter(1)
       if(camera.current!=null){
         const my_photo = [await camera.current.takePhoto({
@@ -212,15 +221,16 @@ function App(): JSX.Element {
       setShowNinethPic(false)
       await delay(100)
 
-      setStep(2);
-      if(camera.current!=null){
-        const video = await camera.current.stopRecording()
-        console.log(video)
+      if(video.current!=null){
+        await video.current.stopRecording()
       }
+      setStep(2);
+      // recording stop
 
       await delay(8000)
       setStep(3);
       console.log(photosCaches)
+      console.log(videos)
     }
 
     PictureSequence()
@@ -378,6 +388,15 @@ function App(): JSX.Element {
                 height: '100%',
                 justifyContent: 'center'
               }}>
+                {(device != null) && 
+                <Camera
+                  ref={video}
+                  video={true}
+                  style={StyleSheet.absoluteFill}
+                  device={device}
+                  isActive={true}
+                />
+                }
                 {(device != null) && 
                 <Camera
                   ref={camera}
