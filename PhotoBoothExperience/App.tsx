@@ -18,6 +18,7 @@ import {
 import { Dimensions } from 'react-native';
 import {
   PhotoFile,
+  VideoFile,
   useCameraDevices,
 } from 'react-native-vision-camera';
 import {
@@ -40,13 +41,13 @@ function App(): JSX.Element {
   const [showedText, setShowedText] = React.useState('');
   const [photos, setPhotos] = React.useState(new Array<PhotoFile>);
   const [photosCaches, setPhotosCaches] = React.useState(new Array<string>);
-  const [videos, setVideos] = React.useState('');
+  const [videosCaches, setVideosCaches] = React.useState(new Array<string>);
+  const [videos, setVideos] = React.useState(new Array<VideoFile>);
   const [_, setHasPermission] = React.useState(false);
   const [paused, setPaused] = React.useState(false);
   const devices = useCameraDevices();
   const device = devices.front;
   const camera = React.useRef<Camera>(null)
-  const video = React.useRef<Camera>(null)
 
   const [showFirstPic, setShowFirstPic] = React.useState(false);
   const [showSecondPic, setShowSecondPic] = React.useState(false);
@@ -95,34 +96,51 @@ function App(): JSX.Element {
     async function PictureSequence() {
       // recording start
       
+      var time = new Date().getTime();
+
       setTakenPhotos(0)
+      setCounter(6)
       //Starting first picture                     
       setShowedText('¡Tienes 3 segundos para hacer la pose más loca!')
-      await delay(790)
-      setCounter(5)
-      await delay(790)
-      setCounter(4)
-      await delay(790)
-      setCounter(3)
-      await delay(790)
-      setCounter(2)
-      if(video.current!=null){
-        video.current.startRecording({
-          flash: 'on',
+      await delay(590)
+      if(camera.current!=null){
+        camera.current.startRecording({
           onRecordingFinished: (video_) => {
-            console.log(video_)
-            setVideos(video_.path)
+            setVideos([video_])
           },
           onRecordingError: (error) => console.error(error),
         })
       }
-      await delay(490)
+      await delay(210)
+      setCounter(5)
+      await delay(1000)
+      setCounter(4)
+      await delay(1000)
+      setCounter(3)
+      await delay(1000)
+      setCounter(2)
+      await delay(1000)
       setCounter(1)
+      // recording stop
+      if(camera.current!=null){
+        await camera.current.stopRecording()
+      }
       if(camera.current!=null){
         const my_photo = [await camera.current.takePhoto({
-          flash: 'on' 
         })]
         setPhotos(my_photo)
+      }
+
+      console.log(new Date().getTime() - time)
+      var time = new Date().getTime();
+
+      if(camera.current!=null){
+        camera.current.startRecording({
+          onRecordingFinished: (video_) => {
+            setVideos([video_])
+          },
+          onRecordingError: (error) => console.error(error),
+        })
       }
       setHasTakenPhotos(true)
       setTakenPhotos(1)
@@ -130,44 +148,81 @@ function App(): JSX.Element {
       //Taking Second Picture
       setShowedText('¡Tomemos una más!')
       setCounter(5)
-      await delay(790)
-      setCounter(4)
-      await delay(790)
+      await delay(1000)
       setHasTakenPhotos(false)
+      setCounter(4)
+      await delay(1000)
       setCounter(3)
-      await delay(790)
+      await delay(1000)
       setCounter(2)
-      await delay(790)
+      await delay(1000)
       setCounter(1)
+      
+      // recording stop
+      if(camera.current!=null){
+        await camera.current.stopRecording()
+      }
       if(camera.current!=null){
         const my_photo = [await camera.current.takePhoto({
-          flash: 'on' 
         })]
         setPhotos(my_photo)
       }
+
+
+      console.log(new Date().getTime() - time)
+      var time = new Date().getTime();
+
+      if(camera.current!=null){
+        camera.current.startRecording({
+          onRecordingFinished: (video_) => {
+            setVideos([video_])
+          },
+          onRecordingError: (error) => console.error(error),
+        })
+      }
+
       setHasTakenPhotos(true)
       setTakenPhotos(2)
 
       //Taking Third Picture
       setShowedText('¡Haz una pose diferente esta vez!')
       setCounter(6)
-      await delay(790)
+      await delay(1000)
       setCounter(5)
       setHasTakenPhotos(false)
-      await delay(790)
+      await delay(1000)
       setCounter(4)
-      await delay(790)
+      await delay(1000)
       setCounter(3)
-      await delay(790)
+      await delay(1000)
       setCounter(2)
-      await delay(790)
+      await delay(1000)
       setCounter(1)
+      
+
+      // recording stop
+      if(camera.current!=null){
+        await camera.current.stopRecording()
+      }
       if(camera.current!=null){
         const my_photo = [await camera.current.takePhoto({
-          flash: 'on' 
         })]
         setPhotos(my_photo)
       }
+
+
+      console.log(new Date().getTime() - time)
+      var time = new Date().getTime();
+
+      if(camera.current!=null){
+        camera.current.startRecording({
+          onRecordingFinished: (video_) => {
+            setVideos([video_])
+          },
+          onRecordingError: (error) => console.error(error),
+        })
+      }
+
       setHasTakenPhotos(true)
       setTakenPhotos(3)
 
@@ -175,25 +230,35 @@ function App(): JSX.Element {
 
       setShowedText('¡Intenta bailar la canción!')
       setCounter(5)
-      await delay(790)
-      setCounter(4)
+      await delay(1000)
       setHasTakenPhotos(false)
-      await delay(790)
+      setCounter(4)
+      await delay(1000)
       setCounter(3)
-      await delay(790)
+      await delay(1000)
       setCounter(2)
-      await delay(790)
+      await delay(1000)
       setCounter(1)
+      
+
+      // recording stop
+      if(camera.current!=null){
+        await camera.current.stopRecording()
+      }
       if(camera.current!=null){
         const my_photo = [await camera.current.takePhoto({
-          flash: 'on' 
         })]
         setPhotos(my_photo)
       }
+
+      console.log(new Date().getTime() - time)
+
       setHasTakenPhotos(true)
       setTakenPhotos(4)
-      await delay(330)
+      await delay(1000)
       setHasTakenPhotos(false)
+      
+      
 
       await delay(170)
       setShowFirstPic(true)
@@ -212,25 +277,24 @@ function App(): JSX.Element {
       await delay(420)
       setShowNinethPic(true)
       await delay(100)
-      setShowSixthPic(false)
-      await delay(100)
-      setShowSeventhPic(false)
+      setShowNinethPic(false)
       await delay(100)
       setShowEighthPic(false)
       await delay(100)
-      setShowNinethPic(false)
+      setShowSeventhPic(false)
+      await delay(100)
+      setShowSixthPic(false)
       await delay(100)
 
-      if(video.current!=null){
-        await video.current.stopRecording()
-      }
+      
       setStep(2);
       // recording stop
+      
 
       await delay(8000)
       setStep(3);
       console.log(photosCaches)
-      console.log(videos)
+      console.log(videosCaches)
     }
 
     PictureSequence()
@@ -268,6 +332,11 @@ function App(): JSX.Element {
       const photos_caches = photosCaches
       photosCaches.push('file://' + photos[0].path)
       setPhotosCaches(photos_caches)
+    }
+    if(!videosCaches.includes('file://' + videos[0].path)){
+      const videos_caches = videosCaches
+      videosCaches.push('file://' + videos[0].path)
+      setVideosCaches(videos_caches)
     }
     return true
   }
@@ -390,16 +459,8 @@ function App(): JSX.Element {
               }}>
                 {(device != null) && 
                 <Camera
-                  ref={video}
-                  video={true}
-                  style={StyleSheet.absoluteFill}
-                  device={device}
-                  isActive={true}
-                />
-                }
-                {(device != null) && 
-                <Camera
                   ref={camera}
+                  video={true}
                   photo={true}
                   style={StyleSheet.absoluteFill}
                   device={device}
