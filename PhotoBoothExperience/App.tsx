@@ -402,6 +402,7 @@ function App(): JSX.Element {
 
       
       setStep(2);
+      Estamos_generando_tus_fotografias.play(_ => {});
       //Generate video
     //   var response = await axios.get(
     //     `${API_URL}`,
@@ -422,6 +423,7 @@ function App(): JSX.Element {
     //   console.log(response)
     // }
       await delay(8000)
+      sigue_a_zack.play(_ => {});
       setStep(2);
     }
 
