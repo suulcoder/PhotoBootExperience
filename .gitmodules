@@ -1,0 +1,3 @@
+[submodule "API_photobooth"]
+	path = API_photobooth
+	url = https://github.com/suulcoder/API_photobooth.git
