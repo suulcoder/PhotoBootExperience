@@ -31,7 +31,61 @@ import TrackPlayer from 'react-native-track-player';
 import { setupPlayer, addTrack } from './musicController';
 import Spinner from 'react-native-loading-spinner-overlay';
 import RNRestart from 'react-native-restart';
+import Sound from 'react-native-sound';
+import axios from 'axios';
 
+const API_URL = 'https://localhost:8000/' 
+
+Sound.setCategory('Playback');
+//Instantiate sounds
+var Estamos_generando_tus_fotografias = new Sound('estamos_generando_tus_fotografias.wav', Sound.MAIN_BUNDLE, (error) => {
+  if (error) {
+    console.log('failed to load the sound', error);
+    return;
+  }
+});
+var Haz_una_pose_diferente_esta_vez = new Sound('haz_una_pose_diferente_esta_vez.wav', Sound.MAIN_BUNDLE, (error) => {
+  if (error) {
+    console.log('failed to load the sound', error);
+    return;
+  }
+});
+var Intenta_bailar_la_cancion = new Sound('intenta_bailar_la_cancion.wav', Sound.MAIN_BUNDLE, (error) => {
+  if (error) {
+    console.log('failed to load the sound', error);
+    return;
+  }
+});
+var Photo_FX_1 = new Sound('photo_fx_1.wav', Sound.MAIN_BUNDLE, (error) => {
+  if (error) {
+    console.log('failed to load the sound', error);
+    return;
+  }
+});
+var Photo_FX_2 = new Sound('photo_fx_2.wav', Sound.MAIN_BUNDLE, (error) => {
+  if (error) {
+    console.log('failed to load the sound', error);
+    return;
+  }
+});
+var sigue_a_zack = new Sound('sigue_a_zack.wav', Sound.MAIN_BUNDLE, (error) => {
+  if (error) {
+    console.log('failed to load the sound', error);
+    return;
+  }
+});
+var Tienes_3_segundos_para_hacer_la_pose_mas_loca = new Sound('tienes_3_segundos_para_hacer_la_pose_mas_loca.wav', Sound.MAIN_BUNDLE, (error) => {
+  if (error) {
+    console.log('failed to load the sound', error);
+    return;
+  }
+});
+var Tomemos_una_mas = new Sound('Tomemos_una_mas.wav', Sound.MAIN_BUNDLE, (error) => {
+  if (error) {
+    console.log('failed to load the sound', error);
+    return;
+  }
+});
 
 function App(): JSX.Element {
   const [step, setStep] = React.useState(0);
@@ -40,8 +94,8 @@ function App(): JSX.Element {
   const [counter, setCounter] = React.useState(6);
   const [showedText, setShowedText] = React.useState('');
   const [photos, setPhotos] = React.useState(new Array<PhotoFile>);
-  const [photosCaches, setPhotosCaches] = React.useState(new Array<string>);
-  const [videosCaches, setVideosCaches] = React.useState(new Array<string>);
+  const [photosCaches, setPhotosCaches] = React.useState(new Array<PhotoFile>);
+  const [videosCaches, setVideosCaches] = React.useState(new Array<VideoFile>);
   const [videos, setVideos] = React.useState(new Array<VideoFile>);
   const [_, setHasPermission] = React.useState(false);
   const [paused, setPaused] = React.useState(false);
@@ -57,6 +111,62 @@ function App(): JSX.Element {
   const [showSeventhPic, setShowSeventhPic] = React.useState(false);
   const [showEighthPic, setShowEighthPic] = React.useState(false);
   const [showNinethPic, setShowNinethPic] = React.useState(false);
+
+  React.useEffect(() => {
+    Estamos_generando_tus_fotografias.setVolume(100);
+    return () => {
+      Estamos_generando_tus_fotografias.release();
+    };
+  }, []);
+
+  React.useEffect(() => {
+    Haz_una_pose_diferente_esta_vez.setVolume(100);
+    return () => {
+      Haz_una_pose_diferente_esta_vez.release();
+    };
+  }, []);
+
+  React.useEffect(() => {
+    Intenta_bailar_la_cancion.setVolume(100);
+    return () => {
+      Intenta_bailar_la_cancion.release();
+    };
+  }, []);
+
+  React.useEffect(() => {
+    Photo_FX_1.setVolume(100);
+    return () => {
+      Photo_FX_1.release();
+    };
+  }, []);
+
+  React.useEffect(() => {
+    Photo_FX_2.setVolume(100);
+    return () => {
+      Photo_FX_2.release();
+    };
+  }, []);
+
+  React.useEffect(() => {
+    sigue_a_zack.setVolume(100);
+    return () => {
+      sigue_a_zack.release();
+    };
+  }, []);
+
+  React.useEffect(() => {
+    Tienes_3_segundos_para_hacer_la_pose_mas_loca.setVolume(100);
+    return () => {
+      Tienes_3_segundos_para_hacer_la_pose_mas_loca.release();
+    };
+  }, []);
+
+  React.useEffect(() => {
+    Tomemos_una_mas.setVolume(100);
+    return () => {
+      Tomemos_una_mas.release();
+    };
+  }, []);
 
   React.useEffect(() => {
     (async () => {
@@ -96,13 +206,12 @@ function App(): JSX.Element {
     async function PictureSequence() {
       // recording start
       
-      var time = new Date().getTime();
+      Tienes_3_segundos_para_hacer_la_pose_mas_loca.play(_ => {});
 
       setTakenPhotos(0)
-      setCounter(6)
+      setCounter(5)
       //Starting first picture                     
-      setShowedText('¡Tienes 3 segundos para hacer la pose más loca!')
-      await delay(590)
+      await delay(790)
       if(camera.current!=null){
         camera.current.startRecording({
           onRecordingFinished: (video_) => {
@@ -111,16 +220,15 @@ function App(): JSX.Element {
           onRecordingError: (error) => console.error(error),
         })
       }
-      await delay(210)
-      setCounter(5)
-      await delay(1000)
       setCounter(4)
-      await delay(1000)
+      await delay(975)
       setCounter(3)
-      await delay(1000)
+      await delay(975)
       setCounter(2)
-      await delay(1000)
+      await delay(975)
       setCounter(1)
+      await delay(975)
+      setCounter(0)
       // recording stop
       if(camera.current!=null){
         await camera.current.stopRecording()
@@ -131,8 +239,9 @@ function App(): JSX.Element {
         setPhotos(my_photo)
       }
 
-      console.log(new Date().getTime() - time)
-      var time = new Date().getTime();
+      Photo_FX_1.play(_ => {});
+      setHasTakenPhotos(true)
+
 
       if(camera.current!=null){
         camera.current.startRecording({
@@ -142,21 +251,21 @@ function App(): JSX.Element {
           onRecordingError: (error) => console.error(error),
         })
       }
-      setHasTakenPhotos(true)
+
       setTakenPhotos(1)
 
       //Taking Second Picture
-      setShowedText('¡Tomemos una más!')
-      setCounter(5)
-      await delay(1000)
-      setHasTakenPhotos(false)
+      Tomemos_una_mas.play(_ => {});
       setCounter(4)
-      await delay(1000)
+      await delay(975)
+      setHasTakenPhotos(false)
       setCounter(3)
-      await delay(1000)
+      await delay(975)
       setCounter(2)
-      await delay(1000)
+      await delay(975)
       setCounter(1)
+      await delay(975)
+      setCounter(0)
       
       // recording stop
       if(camera.current!=null){
@@ -169,8 +278,9 @@ function App(): JSX.Element {
       }
 
 
-      console.log(new Date().getTime() - time)
-      var time = new Date().getTime();
+      Photo_FX_2.play(_ => {});
+      setHasTakenPhotos(true)
+
 
       if(camera.current!=null){
         camera.current.startRecording({
@@ -181,23 +291,22 @@ function App(): JSX.Element {
         })
       }
 
-      setHasTakenPhotos(true)
       setTakenPhotos(2)
 
       //Taking Third Picture
-      setShowedText('¡Haz una pose diferente esta vez!')
-      setCounter(6)
-      await delay(1000)
+      Haz_una_pose_diferente_esta_vez.play(_ => {});
       setCounter(5)
-      setHasTakenPhotos(false)
-      await delay(1000)
+      await delay(975)
       setCounter(4)
-      await delay(1000)
+      setHasTakenPhotos(false)
+      await delay(975)
       setCounter(3)
-      await delay(1000)
+      await delay(975)
       setCounter(2)
-      await delay(1000)
+      await delay(975)
       setCounter(1)
+      await delay(975)
+      setCounter(0)
       
 
       // recording stop
@@ -207,12 +316,12 @@ function App(): JSX.Element {
       if(camera.current!=null){
         const my_photo = [await camera.current.takePhoto({
         })]
+        Photo_FX_1.play(_ => {});
         setPhotos(my_photo)
       }
 
+      Photo_FX_1.play(_ => {});
 
-      console.log(new Date().getTime() - time)
-      var time = new Date().getTime();
 
       if(camera.current!=null){
         camera.current.startRecording({
@@ -222,23 +331,29 @@ function App(): JSX.Element {
           onRecordingError: (error) => console.error(error),
         })
       }
-
       setHasTakenPhotos(true)
+
       setTakenPhotos(3)
 
       //Taking Fourth Picture
 
-      setShowedText('¡Intenta bailar la canción!')
+      Intenta_bailar_la_cancion.play(_ => {});
+      setCounter(6)
+      await delay(975)
       setCounter(5)
-      await delay(1000)
+      await delay(975)
       setHasTakenPhotos(false)
       setCounter(4)
-      await delay(1000)
+      await delay(975)
       setCounter(3)
-      await delay(1000)
+      await delay(975)
       setCounter(2)
-      await delay(1000)
+      await delay(975)
       setCounter(1)
+      await delay(975)
+      setCounter(0)
+
+      Photo_FX_2.play(_ => {});
       
 
       // recording stop
@@ -251,7 +366,6 @@ function App(): JSX.Element {
         setPhotos(my_photo)
       }
 
-      console.log(new Date().getTime() - time)
 
       setHasTakenPhotos(true)
       setTakenPhotos(4)
@@ -260,41 +374,55 @@ function App(): JSX.Element {
       
       
 
-      await delay(170)
-      setShowFirstPic(true)
-      await delay(170)
-      setShowSecondPic(true)
-      await delay(170)
-      setShowThirdPic(true)
-      await delay(170)
-      setShowFourthPic(true)
-      await delay(170)
-      setShowSixthPic(true)
-      await delay(170)
-      setShowSeventhPic(true)
-      await delay(170)
-      setShowEighthPic(true)
-      await delay(420)
-      setShowNinethPic(true)
-      await delay(100)
-      setShowNinethPic(false)
-      await delay(100)
-      setShowEighthPic(false)
-      await delay(100)
-      setShowSeventhPic(false)
-      await delay(100)
-      setShowSixthPic(false)
-      await delay(100)
+      // await delay(170)
+      // setShowFirstPic(true)
+      // await delay(170)
+      // setShowSecondPic(true)
+      // await delay(170)
+      // setShowThirdPic(true)
+      // await delay(170)
+      // setShowFourthPic(true)
+      // await delay(170)
+      // setShowSixthPic(true)
+      // await delay(170)
+      // setShowSeventhPic(true)
+      // await delay(170)
+      // setShowEighthPic(true)
+      // await delay(420)
+      // setShowNinethPic(true)
+      // await delay(100)
+      // setShowNinethPic(false)
+      // await delay(100)
+      // setShowEighthPic(false)
+      // await delay(100)
+      // setShowSeventhPic(false)
+      // await delay(100)
+      // setShowSixthPic(false)
+      // await delay(100)
 
       
       setStep(2);
-      // recording stop
-      
-
+      //Generate video
+    //   var response = await axios.get(
+    //     `${API_URL}`,
+    //     {'audio_file': 
+    //       {
+    //         uri: photosCaches[0],
+    //         name:'userProfile.jpg',
+    //         type:'image/jpg'
+    //       }
+    //     },
+    //     {
+    //       headers: {
+    //           'Accept': '*/*',
+    //           'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW',
+    //       },
+    //     }
+    //   )
+    //   console.log(response)
+    // }
       await delay(8000)
-      setStep(3);
-      console.log(photosCaches)
-      console.log(videosCaches)
+      setStep(2);
     }
 
     PictureSequence()
@@ -328,14 +456,14 @@ function App(): JSX.Element {
 
 
   function logTakenPhotos() {
-    if(!photosCaches.includes('file://' + photos[0].path)){
+    if(!photosCaches.includes(photos[0])){
       const photos_caches = photosCaches
-      photosCaches.push('file://' + photos[0].path)
+      photosCaches.push(photos[0])
       setPhotosCaches(photos_caches)
     }
-    if(!videosCaches.includes('file://' + videos[0].path)){
+    if(!videosCaches.includes(videos[0])){
       const videos_caches = videosCaches
-      videosCaches.push('file://' + videos[0].path)
+      videosCaches.push(videos[0])
       setVideosCaches(videos_caches)
     }
     return true
@@ -364,14 +492,14 @@ function App(): JSX.Element {
                   width: 250, 
                   height: 250,
                   marginTop: 20,
-                  marginBottom: 40,
+                  marginBottom: 10,
                 }
               }
             />
             <Text
               style={{
                 color: Colors.black,
-                fontSize: 40,
+                fontSize: 30,
                 fontWeight: 'bold',
                 fontFamily: 'Roboto',
                 textAlign: 'center'
@@ -381,7 +509,7 @@ function App(): JSX.Element {
             <Text
               style={{
                 color: Colors.black,
-                fontSize: 32,
+                fontSize: 24,
                 fontWeight: 'bold',
                 marginBottom: 50,
                 fontFamily: 'Roboto',
@@ -580,9 +708,9 @@ function App(): JSX.Element {
                       height: 40,
                     }}>{takenPhotos}</Text>
             </View>
-            { showFirstPic && <Image 
+            {/* { showFirstPic && <Image 
               //Right half IMG
-              source={{uri: photosCaches[0]}}
+              source={{uri:  photosCaches[0]}}
               style={{
                 width: Dimensions.get('window').width/2, 
                 height: Dimensions.get('window').height,
@@ -661,7 +789,7 @@ function App(): JSX.Element {
                 position: 'absolute',
                 top: Dimensions.get('window').height/2,
               }}
-            />}
+            />} */}
         </SafeAreaView> :
         step === 2 ?
         <SafeAreaView style={{backgroundColor:Colors.black}}>
